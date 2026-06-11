@@ -16,8 +16,7 @@ import { UI } from "@/lib/constants";
 import type { ChatSession } from "@/lib/types";
 
 export default function Home() {
-  // ── State Management ────────────────────────────────────
-  const { sessionId } = useSession();
+  const { sessionId, setSessionId } = useSession();
   const { messages, isStreaming, error, sendMessage, clearChat } =
     useChat(sessionId);
   const { sessions, addSession, clearSessions } = useSessions();
@@ -60,9 +59,10 @@ export default function Home() {
    * but does not trigger a query since we only show history here.
    */
   const handleSessionClick = useCallback((session: ChatSession) => {
-    // Intentionally left blank: "is pey click krny py query nhi chalni"
-    // The backend uses a 10 min TTL for these sessions.
-  }, []);
+    // Switch the active session ID.
+    // The useChat hook will automatically load the messages from localStorage.
+    setSessionId(session.id);
+  }, [setSessionId]);
 
   // ── Render ──────────────────────────────────────────────
 

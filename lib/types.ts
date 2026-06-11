@@ -82,6 +82,7 @@ export interface UseChatReturn {
 export interface UseSessionReturn {
   sessionId: string;
   resetSession: () => string;
+  setSessionId: (id: string) => void;
 }
 
 export interface UseSessionsReturn {

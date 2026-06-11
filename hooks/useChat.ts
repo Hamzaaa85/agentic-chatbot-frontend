@@ -6,7 +6,7 @@
    This is the heart of the chatbot's frontend logic.
    ═══════════════════════════════════════════════════════════ */
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { streamChat } from "@/lib/api";
 import type { Message, UseChatReturn } from "@/lib/types";
 
@@ -21,6 +21,31 @@ export function useChat(sessionId: string): UseChatReturn {
 
   // AbortController ref for cancelling in-flight requests
   const abortRef = useRef<AbortController | null>(null);
+
+  // Load messages from localStorage when sessionId changes
+  useEffect(() => {
+    if (!sessionId) return;
+    try {
+      const saved = localStorage.getItem(`karobar_chat_${sessionId}`);
+      if (saved) {
+        setMessages(JSON.parse(saved));
+      } else {
+        setMessages([]);
+      }
+    } catch {
+      setMessages([]);
+    }
+  }, [sessionId]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (!sessionId || messages.length === 0) return;
+    try {
+      localStorage.setItem(`karobar_chat_${sessionId}`, JSON.stringify(messages));
+    } catch {
+      // ignore
+    }
+  }, [sessionId, messages]);
 
   const sendMessage = useCallback(
     async (text: string) => {

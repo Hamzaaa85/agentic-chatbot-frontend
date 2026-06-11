@@ -13,7 +13,7 @@ export function WelcomeHero() {
     <div className="flex flex-col items-center animate-fade-in">
       {/* Karobar Online Logo */}
       <Image
-        src="/karobar-online-logo.png"
+        src="/karobar-online-ai-logo1.png"
         alt="Karobar Online"
         width={140}
         height={42}
