@@ -31,7 +31,7 @@
 
   /* ── Layout ── */
   --sidebar-width: 260px;
-  --chat-input-max-width: 640px;
+  --chat-input-max-width: 860px;
 
   /* ── Transitions ── */
   --transition-fast: 150ms ease;

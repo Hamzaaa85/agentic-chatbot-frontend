@@ -143,7 +143,14 @@ export async function streamChat({
         switch (event) {
           case "token": {
             const tokenData = data as SSETokenEvent;
-            onToken(tokenData.text);
+            // Artificial Typewriter Effect for smooth UI
+            // We split the chunk into smaller pieces to ensure a smooth visual stream
+            const chars = tokenData.text.split("");
+            for (let i = 0; i < chars.length; i += 2) {
+              onToken(chars.slice(i, i + 2).join(""));
+              // 15ms per 2 chars = ~133 chars per second (smooth reading speed)
+              await new Promise((r) => setTimeout(r, 5));
+            }
             break;
           }
           case "final": {
