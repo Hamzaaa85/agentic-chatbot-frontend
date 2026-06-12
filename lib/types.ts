@@ -89,5 +89,6 @@ export interface UseSessionsReturn {
   sessions: ChatSession[];
   addSession: (session: ChatSession) => void;
   removeSession: (id: string) => void;
+  updateSession: (id: string, updates: Partial<ChatSession>) => void;
   clearSessions: () => void;
 }

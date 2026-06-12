@@ -72,10 +72,22 @@ export function useSessions(): UseSessionsReturn {
     });
   }, []);
 
+  const updateSession = useCallback((id: string, updates: Partial<ChatSession>) => {
+    setSessions((prev) => {
+      const sessionIndex = prev.findIndex((s) => s.id === id);
+      if (sessionIndex === -1) return prev;
+
+      const updated = [...prev];
+      updated[sessionIndex] = { ...updated[sessionIndex], ...updates };
+      saveSessions(updated);
+      return updated;
+    });
+  }, []);
+
   const clearSessions = useCallback(() => {
     setSessions([]);
     saveSessions([]);
   }, []);
 
-  return { sessions, addSession, removeSession, clearSessions };
+  return { sessions, addSession, removeSession, updateSession, clearSessions };
 }

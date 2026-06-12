@@ -6,7 +6,7 @@
 
 "use client";
 
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { ChatArea } from "@/components/chat";
 import { useSession } from "@/hooks/useSession";
@@ -19,8 +19,25 @@ export default function Home() {
   const { sessionId, setSessionId } = useSession();
   const { messages, isStreaming, error, sendMessage, clearChat } =
     useChat(sessionId);
-  const { sessions, addSession, clearSessions } = useSessions();
+  const { sessions, addSession, updateSession, clearSessions } = useSessions();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // ── Auto-update Session Description ──────────────────────
+
+  useEffect(() => {
+    if (!isStreaming && messages.length > 1 && sessionId) {
+      const assistantMsg = messages.find((m) => m.role === "assistant");
+      if (assistantMsg && assistantMsg.content) {
+        // Strip basic markdown symbols and normalize spaces for a clean snippet
+        const cleanSnippet = assistantMsg.content
+          .replace(/[#*`_]/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+        
+        updateSession(sessionId, { description: cleanSnippet });
+      }
+    }
+  }, [isStreaming, messages, sessionId, updateSession]);
 
   // ── Handlers ────────────────────────────────────────────
 

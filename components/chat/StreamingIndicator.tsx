@@ -56,7 +56,7 @@ export function StreamingIndicator() {
       setTimeout(() => {
         setPhraseIndex((prev) => (prev + 1) % THINKING_PHRASES.length);
         setFade(true); // Start fade in
-      }, 300); // Wait for fade out to complete before changing text
+      }, 200); // Wait for fade out to complete before changing text
       
     }, 3000);
 
